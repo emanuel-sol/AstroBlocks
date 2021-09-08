@@ -1,6 +1,6 @@
 # AstroBlocks: A Private Blockchain Application
 
-I created AstroBlocks to demonstrate my familiarity with the fundamentals concepts of a Blockchain platform.
+I created AstroBlocks to demonstrate my familiarity with the fundamental concepts of a Blockchain platform.
 
 ## What problem does AstroBlocks solve?
 
