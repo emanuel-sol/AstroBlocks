@@ -65,10 +65,8 @@ class Blockchain {
     return new Promise(async (resolve, reject) => {
       try {
         // Block height
-        console.log('Self.h ' + self.height);
         const newHeight = self.height + 1;
         block.height = newHeight;
-        console.log('Block.h ' + block.height);
 
         // UTC timestamp
         block.time = new Date().getTime().toString().slice(0, -3);
