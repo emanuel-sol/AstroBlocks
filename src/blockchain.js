@@ -65,20 +65,19 @@ class Blockchain {
     return new Promise(async (resolve, reject) => {
       try {
         // Block height
+        console.log('Self.h ' + self.height);
         const newHeight = self.height + 1;
         block.height = newHeight;
+        console.log('Block.h ' + block.height);
 
         // UTC timestamp
         block.time = new Date().getTime().toString().slice(0, -3);
 
-        // chain height
-        const chainHeight = await self.getChainHeight();
-
-        if (chainHeight > 0) {
+        if (newHeight > 0) {
           const prevBlock = await self.getBlockByHeight(self.height);
 
           // previous block hash
-          block.previousHash = prevBlock.hash;
+          block.previousBlockHash = prevBlock.hash;
         }
 
         // SHA256 requires a string of data
