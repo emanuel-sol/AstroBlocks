@@ -64,6 +64,10 @@ class Blockchain {
     let self = this;
     return new Promise(async (resolve, reject) => {
       try {
+        const errorLog = await self.validateChain();
+        if (errorLog.length > 0) {
+          reject('Block cannot be added, the chain has been tampered!');
+        }
         // Block height
         const newHeight = self.height + 1;
         block.height = newHeight;
@@ -139,12 +143,12 @@ class Blockchain {
       if (currTime - time < 300) {
         const verified = bitcoinMessage.verify(message, address, signature);
         if (!verified) {
-          reject(new Error('Message not verified'));
+          reject('Message not verified');
         }
         let newBlock = new BlockClass.Block({ owner: address, star: star });
         resolve(await self._addBlock(newBlock));
       } else {
-        reject(new Error('Signing window expired'));
+        reject('Signing window expired');
       }
     });
   }
@@ -219,16 +223,25 @@ class Blockchain {
         if (block.height === 0) {
           let validated = await block.validate();
           if (!validated) {
-            errorLog.push({ error: 'Genesis validation failed' });
+            errorLog.push({
+              error: 'Genesis validation failed',
+              blockHeight: block.height,
+            });
           }
         } else {
           let blockValidated = await block.validate();
           let prevHashValidated =
             block.previousBlockHash === self.chain[i - 1].hash;
           if (!blockValidated) {
-            errorLog.push({ error: 'Block validation failed' });
+            errorLog.push({
+              error: 'Block validation failed',
+              blockHeight: block.height,
+            });
           } else if (!prevHashValidated) {
-            errorLog.push({ error: "Previous hash doesn't match" });
+            errorLog.push({
+              error: "Previous hash doesn't match",
+              blockHeight: block.height,
+            });
           }
         }
       }
